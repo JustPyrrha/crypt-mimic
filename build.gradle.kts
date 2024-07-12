@@ -17,9 +17,19 @@ fabricApi {
     configureDataGeneration()
 }
 
+val enableEnhancedClassRedefinition: Boolean = if (System.getProperty("java.vendor") == "JetBrains s.r.o.") {
+    println("JetBrains Runtime found, enabling Enhanced Class Redefinition (DCEVM)")
+    true
+} else {
+    false
+}
+
 loom {
     runs {
         configureEach {
+            if (enableEnhancedClassRedefinition) {
+                vmArgs("-XX:+AllowEnhancedClassRedefinition")
+            }
             runDir("runs/$name")
         }
     }
@@ -32,7 +42,7 @@ loom {
 
 repositories {
     maven("https://api.modrinth.com/maven") {
-
+        name = "Modrinth"
     }
 }
 
@@ -61,9 +71,11 @@ tasks {
     processResources {
         inputs.property("version", project.version.toString())
         filesMatching("fabric.mod.json") {
-            expand(mutableMapOf(
-                "version" to project.version.toString()
-            ))
+            expand(
+                mutableMapOf(
+                    "version" to project.version.toString()
+                )
+            )
         }
     }
 
@@ -77,6 +89,13 @@ tasks {
 kotlin {
     jvmToolchain(21)
     explicitApi()
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            listOf(
+                "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
+            )
+        )
+    }
 }
 
 java {

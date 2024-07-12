@@ -11,8 +11,9 @@ public sealed class EmptySerializedPayload : SerializedPayload<EmptySerializedPa
     override fun codec(): PacketCodec<RegistryByteBuf, EmptySerializedPayload> = CODEC
     override fun getId(): CustomPayload.Id<out CustomPayload> = ID
 
-    public companion object : SerializedPayloadCompanion<EmptySerializedPayload> {
+    public companion object Configuration : SerializedPayloadConfiguration<EmptySerializedPayload> {
         override val ID: CustomPayload.Id<EmptySerializedPayload> = CustomPayload.Id(ident("empty"))
         override val CODEC: PacketCodec<RegistryByteBuf, EmptySerializedPayload> = codec()
+        override val CHANNEL: PayloadChannel = PayloadChannel.ClientboundPlay
     }
 }

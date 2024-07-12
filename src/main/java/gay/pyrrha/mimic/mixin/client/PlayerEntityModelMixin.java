@@ -1,7 +1,6 @@
 package gay.pyrrha.mimic.mixin.client;
 
 import gay.pyrrha.mimic.client.entity.ClientNPCEntity;
-import gay.pyrrha.mimic.entity.ServerNPCEntity;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;

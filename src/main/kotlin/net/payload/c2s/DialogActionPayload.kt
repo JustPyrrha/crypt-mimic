@@ -1,8 +1,9 @@
 package gay.pyrrha.mimic.net.payload.c2s
 
 import gay.pyrrha.mimic.ident
+import gay.pyrrha.mimic.net.payload.api.PayloadChannel
 import gay.pyrrha.mimic.net.payload.api.SerializedPayload
-import gay.pyrrha.mimic.net.payload.api.SerializedPayloadCompanion
+import gay.pyrrha.mimic.net.payload.api.SerializedPayloadConfiguration
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import net.minecraft.network.RegistryByteBuf
@@ -20,8 +21,9 @@ public data class DialogActionPayload(
     override fun codec(): PacketCodec<RegistryByteBuf, DialogActionPayload> = CODEC
     override fun getId(): CustomPayload.Id<out CustomPayload> = ID
 
-    public companion object : SerializedPayloadCompanion<DialogActionPayload> {
+    public companion object Configuration : SerializedPayloadConfiguration<DialogActionPayload> {
         override val ID: CustomPayload.Id<DialogActionPayload> = CustomPayload.Id(ident("c2s_dialog_action"))
         override val CODEC: PacketCodec<RegistryByteBuf, DialogActionPayload> = codec()
+        override val CHANNEL: PayloadChannel = PayloadChannel.ServerboundPlay
     }
 }

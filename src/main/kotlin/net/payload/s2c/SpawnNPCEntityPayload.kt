@@ -1,8 +1,9 @@
 package gay.pyrrha.mimic.net.payload.s2c
 
 import gay.pyrrha.mimic.ident
+import gay.pyrrha.mimic.net.payload.api.PayloadChannel
 import gay.pyrrha.mimic.net.payload.api.SerializedPayload
-import gay.pyrrha.mimic.net.payload.api.SerializedPayloadCompanion
+import gay.pyrrha.mimic.net.payload.api.SerializedPayloadConfiguration
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import net.minecraft.network.RegistryByteBuf
@@ -28,8 +29,9 @@ public data class SpawnNPCEntityPayload(
     override fun codec(): PacketCodec<RegistryByteBuf, SpawnNPCEntityPayload> = CODEC
     override fun getId(): CustomPayload.Id<out CustomPayload> = ID
 
-    public companion object : SerializedPayloadCompanion<SpawnNPCEntityPayload> {
+    public companion object Configuration : SerializedPayloadConfiguration<SpawnNPCEntityPayload> {
         override val ID: CustomPayload.Id<SpawnNPCEntityPayload> = CustomPayload.Id(ident("s2c_spawn_npc_entity"))
         override val CODEC: PacketCodec<RegistryByteBuf, SpawnNPCEntityPayload> = codec()
+        override val CHANNEL: PayloadChannel = PayloadChannel.ClientboundPlay
     }
 }
