@@ -166,22 +166,20 @@ public class ServerNPCEntity(entityType: EntityType<ServerNPCEntity>, world: Wor
         val npcId = nbt.getString("NpcId")
         dataTracker[NPC_ID] = npcId
 
-        // TODO: Maybe backwards compat. I'll let Py decide.
-        /*
         if (nbt.contains("ArmourItems", NbtElement.LIST_TYPE.toInt())) {
             val nbtList = nbt.getList("ArmourItems", NbtElement.COMPOUND_TYPE.toInt())
-            nbtList.forEachIndexed { idx, _ ->
-                armourItems[idx] = ItemStack.fromNbtOrEmpty(registryManager, nbtList.getCompound(idx))
+            nbtList.forEachIndexed { index, _ ->
+                this.inventory.armor[index] = ItemStack.fromNbtOrEmpty(registryManager, nbtList.getCompound(index))
             }
         }
 
         if (nbt.contains("HandItems", NbtElement.LIST_TYPE.toInt())) {
             val nbtList = nbt.getList("HandItems", NbtElement.COMPOUND_TYPE.toInt())
-            nbtList.forEachIndexed { idx, _ ->
-                heldItems[idx] = ItemStack.fromNbtOrEmpty(registryManager, nbtList.getCompound(idx))
-            }
+
+            this.inventory.selectedSlot = 0
+            this.inventory.main[0] = ItemStack.fromNbtOrEmpty(registryManager, nbtList.getCompound(0))
+            this.inventory.offHand[0] = ItemStack.fromNbtOrEmpty(registryManager, nbtList.getCompound(1))
         }
-         */
 
         setSmall(nbt.getBoolean("Small"))
         setLocked(nbt.getBoolean("Locked"))
