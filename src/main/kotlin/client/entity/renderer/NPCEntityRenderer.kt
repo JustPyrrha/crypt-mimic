@@ -1,18 +1,14 @@
 package gay.pyrrha.mimic.client.entity.renderer
 
-
-import gay.pyrrha.mimic.entity.NPCEntity
+import com.unascribed.ears.EarsFeatureRenderer
+import gay.pyrrha.mimic.client.entity.ClientNPCEntity
 import gay.pyrrha.mimic.registry.MimicRegistries
+import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.client.network.AbstractClientPlayerEntity
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.render.entity.EntityRendererFactory
-import net.minecraft.client.render.entity.LivingEntityRenderer
-import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer
-import net.minecraft.client.render.entity.feature.ElytraFeatureRenderer
-import net.minecraft.client.render.entity.feature.HeadFeatureRenderer
-import net.minecraft.client.render.entity.feature.HeldItemFeatureRenderer
-import net.minecraft.client.render.entity.model.ArmorEntityModel
+import net.minecraft.client.render.entity.PlayerEntityRenderer
 import net.minecraft.client.render.entity.model.BipedEntityModel
-import net.minecraft.client.render.entity.model.EntityModelLayers
 import net.minecraft.client.render.entity.model.PlayerEntityModel
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.EntityPose
@@ -20,36 +16,26 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
 public class NPCEntityRenderer(ctx: EntityRendererFactory.Context, slimArms: Boolean = false) :
-    LivingEntityRenderer<NPCEntity, PlayerEntityModel<NPCEntity>>(
+    PlayerEntityRenderer(
         ctx,
-        PlayerEntityModel<NPCEntity>(
-            ctx.getPart(if (slimArms) EntityModelLayers.PLAYER_SLIM else EntityModelLayers.PLAYER),
-            slimArms
-        ),
-        0.5f
+        slimArms
     ) {
 
     init {
-        addFeature(
-            ArmorFeatureRenderer(
-                this,
-                ArmorEntityModel(
-                    ctx.getPart(if (slimArms) EntityModelLayers.PLAYER_SLIM_INNER_ARMOR else EntityModelLayers.PLAYER_INNER_ARMOR)
-                ),
-                ArmorEntityModel(
-                    ctx.getPart(if (slimArms) EntityModelLayers.PLAYER_SLIM_OUTER_ARMOR else EntityModelLayers.PLAYER_OUTER_ARMOR)
-                ),
-                ctx.modelManager
-            )
-        )
-
-        addFeature(HeldItemFeatureRenderer(this, ctx.heldItemRenderer))
-        addFeature(ElytraFeatureRenderer(this, ctx.modelLoader))
-        addFeature(HeadFeatureRenderer(this, ctx.modelLoader, ctx.heldItemRenderer))
+        if (FabricLoader.getInstance().isModLoaded("ears"))
+            addFeature(EarsFeatureRenderer(this))
     }
 
+    public companion object NpcGetter {
+        @JvmStatic
+        public fun asNpc(entity: AbstractClientPlayerEntity) : ClientNPCEntity {
+            return entity as ClientNPCEntity
+        }
+    }
+
+
     override fun render(
-        livingEntity: NPCEntity,
+        livingEntity: AbstractClientPlayerEntity,
         f: Float,
         g: Float,
         matrixStack: MatrixStack?,
@@ -60,16 +46,16 @@ public class NPCEntityRenderer(ctx: EntityRendererFactory.Context, slimArms: Boo
         super.render(livingEntity, f, g, matrixStack, vertexConsumerProvider, i)
     }
 
-    override fun getTexture(entity: NPCEntity): Identifier =
-        entity.world.registryManager[MimicRegistries.NPC][entity.getNpcId()]?.skin?.texture
+    override fun getTexture(entity: AbstractClientPlayerEntity): Identifier =
+        asNpc(entity).registryManager[MimicRegistries.NPC].get(asNpc(entity).getNpcId())?.skin?.texture
             ?: Identifier.ofVanilla("textures/entity/player/wide/steve.png")
 
-    override fun scale(entity: NPCEntity, matrices: MatrixStack, amount: Float) {
+    public override fun scale(entity: AbstractClientPlayerEntity, matrices: MatrixStack, amount: Float) {
         val scale = 0.9375f
         matrices.scale(scale, scale, scale)
     }
 
-    private fun setModelPose(model: PlayerEntityModel<NPCEntity>) {
+    private fun setModelPose(model: PlayerEntityModel<AbstractClientPlayerEntity>) {
         model.setVisible(true)
         model.sneaking = false
         model.leftArmPose = BipedEntityModel.ArmPose.EMPTY
@@ -77,17 +63,18 @@ public class NPCEntityRenderer(ctx: EntityRendererFactory.Context, slimArms: Boo
     }
 
     override fun renderLabelIfPresent(
-        entity: NPCEntity,
+        entity: AbstractClientPlayerEntity,
         text: Text,
         matrices: MatrixStack,
         vertexConsumers: VertexConsumerProvider,
         light: Int,
         tickDelta: Float
     ) {
+        val npc = asNpc(entity)
         val distance = dispatcher.getSquaredDistanceToCamera(entity)
-        val titleText = entity.getTitle()
+        val titleText = npc.getTitle()
         matrices.push()
-        if (entity.isSmall) {
+        if (npc.isSmall) {
             matrices.translate(0f, -(entity.getBaseDimensions(EntityPose.STANDING).height - 0.1f), 0f)
         }
         if (distance < 100 && titleText != null) {

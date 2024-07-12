@@ -1,6 +1,7 @@
 package gay.pyrrha.mimic.mixin.client;
 
-import gay.pyrrha.mimic.entity.NPCEntity;
+import gay.pyrrha.mimic.client.entity.ClientNPCEntity;
+import gay.pyrrha.mimic.entity.ServerNPCEntity;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
@@ -27,7 +28,7 @@ public abstract class PlayerEntityModelMixin<T extends LivingEntity> extends Bip
 
     @Inject(method = "setAngles(Lnet/minecraft/entity/LivingEntity;FFFFF)V", at = @At("HEAD"), cancellable = true)
     private void mimic$setAngles(T livingEntity, float f, float g, float h, float i, float j, CallbackInfo ci) {
-        if (livingEntity instanceof NPCEntity npcEntity) {
+        if (livingEntity instanceof ClientNPCEntity npcEntity) {
             var offset = 0.017453292F;
             this.head.pitch = offset * npcEntity.getHeadRotation().getPitch();
             this.head.yaw = offset * npcEntity.getHeadRotation().getYaw();

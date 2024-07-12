@@ -7,6 +7,7 @@ fabric-mappings = "1.21+build.2"
 kotlin = "2.0.0"
 kotlin-logging = "6.0.9"
 minecraft = "1.21"
+ears = "1.4.6"
 
 [libraries]
 fabric-api = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabric-api" }
@@ -15,6 +16,7 @@ fabric-loader = { group = "net.fabricmc", name = "fabric-loader", version.ref = 
 fabric-mappings = { group = "net.fabricmc", name = "yarn", version.ref = "fabric-mappings" }
 kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "kotlin-logging" }
 minecraft = { group = "org.mojang", name = "minecraft", version.ref = "minecraft" }
+ears = { group = "maven.modrinth", name = "ears", version.ref = "ears" }
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

@@ -1,9 +1,11 @@
 package gay.pyrrha.mimic.net.payload
 
+import gay.pyrrha.mimic.entity.ServerNPCEntity
 import gay.pyrrha.mimic.net.payload.api.SerializedPayload
 import gay.pyrrha.mimic.net.payload.api.SerializedPayloadCompanion
 import gay.pyrrha.mimic.net.payload.c2s.DialogActionPayload
 import gay.pyrrha.mimic.net.payload.s2c.OpenDialogScreenPayload
+import gay.pyrrha.mimic.net.payload.s2c.SpawnNPCEntityPayload
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
 import net.minecraft.network.packet.CustomPayload
 

@@ -1,9 +1,10 @@
 package gay.pyrrha.mimic.client.screen
 
 import gay.pyrrha.mimic.client.ModColours
+import gay.pyrrha.mimic.client.entity.ClientNPCEntity
 import gay.pyrrha.mimic.client.screen.widget.MimicButtonWidget
 import gay.pyrrha.mimic.dialog.DialogFrame
-import gay.pyrrha.mimic.entity.NPCEntity
+import gay.pyrrha.mimic.entity.ServerNPCEntity
 import gay.pyrrha.mimic.ident
 import gay.pyrrha.mimic.net.payload.c2s.DialogActionPayload
 import gay.pyrrha.mimic.npc.Npc
@@ -15,7 +16,7 @@ import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.text.Text
 import kotlin.math.max
 
-public class DialogScreen(private val frame: DialogFrame, private val npc: Npc, private val entity: NPCEntity) :
+public class DialogScreen(private val frame: DialogFrame, private val npc: Npc, private val entity: ClientNPCEntity) :
     Screen(frame.text) {
     init {
         shouldHideHud = true

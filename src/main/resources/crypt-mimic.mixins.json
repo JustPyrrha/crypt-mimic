@@ -1,11 +1,18 @@
 {
   "required": true,
   "package": "gay.pyrrha.mimic.mixin",
+  "plugin": "gay.pyrrha.mimic.MimicMixinPlugin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [],
+  "mixins": [
+    "ClientPlayNetworkHandlerMixin",
+    "EntityDataObjectMixin"
+  ],
   "client": [
+    "client.AbstractClientPlayerEntityMixin",
     "client.EntityRendererDispatcherMixin",
-    "client.PlayerEntityModelMixin"
+    "client.PlayerEntityModelMixin",
+    "integration.ears.ResourceTextureMixin",
+    "integration.ears.TextureManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

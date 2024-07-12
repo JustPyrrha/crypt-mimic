@@ -4,7 +4,7 @@ import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import gay.pyrrha.mimic.entity.ModEntityTypes
-import gay.pyrrha.mimic.entity.NPCEntity
+import gay.pyrrha.mimic.entity.ServerNPCEntity
 import gay.pyrrha.mimic.npc.Npc
 import gay.pyrrha.mimic.registry.MimicRegistries
 import net.minecraft.command.CommandRegistryAccess
@@ -12,6 +12,7 @@ import net.minecraft.command.argument.NbtCompoundArgumentType
 import net.minecraft.command.argument.RegistryEntryReferenceArgumentType
 import net.minecraft.command.argument.Vec3ArgumentType
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
@@ -79,16 +80,16 @@ public object MimicNPCCommand {
         npc: RegistryEntry.Reference<Npc>,
         pos: Vec3d,
         nbt: NbtCompound
-    ): NPCEntity {
+    ): ServerNPCEntity {
         val blockPos = BlockPos.ofFloored(pos)
         if (!World.isValid(blockPos)) {
             throw INVALID_POSITION_EXCEPTION.create()
         } else {
             val nbtCompound = nbt.copy()
-            nbtCompound.putString("NpcId", source.registryManager[MimicRegistries.NPC].getId(npc.value()).toString())
+            nbtCompound.putString("NpcId", npc.idAsString)
             nbtCompound.putBoolean("Invulnerable", true)
-            val entity = NPCEntity(ModEntityTypes.NPC, source.world)
-            entity.setNpcId(source.registryManager[MimicRegistries.NPC].getId(npc.value())!!)
+            val entity = ServerNPCEntity(ModEntityTypes.NPC, source.world)
+            entity.setNpcId(npc.registryKey().value)
             entity.updatePositionAndAngles(pos.x, pos.y, pos.z, entity.yaw, entity.pitch)
 
             if (!source.world.spawnNewEntityAndPassengers(entity)) {

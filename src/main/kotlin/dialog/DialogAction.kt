@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.PrimitiveCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import gay.pyrrha.mimic.entity.NPCEntity
+import gay.pyrrha.mimic.entity.ServerNPCEntity
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import net.fabricmc.fabric.api.event.Event

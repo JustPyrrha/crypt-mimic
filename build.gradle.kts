@@ -20,8 +20,6 @@ fabricApi {
 loom {
     runs {
         configureEach {
-            // enable JBR DCEVM
-            vmArgs("-XX:+AllowEnhancedClassRedefinition")
             runDir("runs/$name")
         }
     }
@@ -29,6 +27,12 @@ loom {
         register("crypt-mimic") {
             sourceSet(sourceSets.main.get())
         }
+    }
+}
+
+repositories {
+    maven("https://api.modrinth.com/maven") {
+
     }
 }
 
@@ -41,6 +45,10 @@ dependencies {
 
     modImplementation(libs.kotlin.logging)
     include(libs.kotlin.logging)
+
+    // Unfortunately, Ears cannot be supported without the full mod.
+    modCompileOnly(libs.ears)
+    modLocalRuntime(libs.ears)
 
     testImplementation(kotlin("test"))
 }
@@ -69,11 +77,6 @@ tasks {
 kotlin {
     jvmToolchain(21)
     explicitApi()
-    compilerOptions {
-        freeCompilerArgs.addAll(listOf(
-            "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
-        ))
-    }
 }
 
 java {

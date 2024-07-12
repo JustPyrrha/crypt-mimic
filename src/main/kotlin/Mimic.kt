@@ -2,7 +2,7 @@ package gay.pyrrha.mimic
 
 import gay.pyrrha.mimic.dialog.DialogAction
 import gay.pyrrha.mimic.entity.ModEntityTypes
-import gay.pyrrha.mimic.entity.NPCEntity
+import gay.pyrrha.mimic.entity.ServerNPCEntity
 import gay.pyrrha.mimic.net.payload.ModPayloadRegistry
 import gay.pyrrha.mimic.net.payload.c2s.DialogActionPayload
 import gay.pyrrha.mimic.net.payload.s2c.OpenDialogScreenPayload
@@ -38,7 +38,7 @@ public object Mimic : ModInitializer {
                     when (action.action) {
                         ident("show_dialog") -> ServerPlayNetworking.send(
                             player,
-                            OpenDialogScreenPayload(Identifier.of(action.value!!), entity.getNpcId(), entity.id)
+                            OpenDialogScreenPayload(Identifier.of(action.value!!), entity.getNpcId(), entity.asPlayer().id)
                         )
                     }
                 }
@@ -49,7 +49,7 @@ public object Mimic : ModInitializer {
                     when (action.action) {
                         ident("show_dialog") -> ServerPlayNetworking.send(
                             player,
-                            OpenDialogScreenPayload(Identifier.of(action.value!!), entity.getNpcId(), entity.id)
+                            OpenDialogScreenPayload(Identifier.of(action.value!!), entity.getNpcId(), entity.asPlayer().id)
                         )
                     }
                 }
@@ -59,7 +59,7 @@ public object Mimic : ModInitializer {
                 ServerPlayNetworking.registerGlobalReceiver(DialogActionPayload.ID) { payload, context ->
                     DialogAction.EVENT.invoker().onAction(
                         context.player(),
-                        context.player().world!!.getEntityById(payload.npcEntityId) as NPCEntity,
+                        context.player().world!!.getEntityById(payload.npcEntityId) as ServerNPCEntity,
                         DialogAction(
                             payload.action,
                             payload.value
