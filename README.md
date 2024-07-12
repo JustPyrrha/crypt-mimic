@@ -1,5 +1,6 @@
 # Crypt: Mimic
 [![Made for ModFest: Carnival](https://raw.githubusercontent.com/ModFest/art/v2/badge/svg/carnival/cozy.svg)](https://modfest.net/carnival)
+[<img alt="Human Made Mark" src="https://humanmademark.com/white-logo.png" width="196"/>](https://humanmademark.com/)
 
 Not what I set out to make, but still something cool :3
 
